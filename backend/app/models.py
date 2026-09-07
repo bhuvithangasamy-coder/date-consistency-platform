@@ -6,7 +6,7 @@ from backend.app.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(100), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
@@ -17,7 +17,7 @@ class User(Base):
 class Dataset(Base):
     __tablename__ = "datasets"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     name = Column(String(100), nullable=False)
     source_type = Column(String(50), default="Kaggle MIMIC-IV")
     version = Column(String(20), default="v2.2")
@@ -34,20 +34,20 @@ class Dataset(Base):
 class DatasetTable(Base):
     __tablename__ = "dataset_tables"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     dataset_id = Column(Integer, ForeignKey("datasets.id"), nullable=False)
     table_name = Column(String(100), nullable=False)
     record_count = Column(Integer, default=0)
     column_count = Column(Integer, default=0)
-    date_columns = Column(JSON, default=list)
-    schema_info = Column(JSON, default=dict)
+    date_columns = Column(JSON, nullable=True)
+    schema_info = Column(JSON, nullable=True)
 
     dataset = relationship("Dataset", back_populates="tables")
 
 class ValidationRule(Base):
     __tablename__ = "validation_rules"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     rule_code = Column(String(20), unique=True, index=True, nullable=False) # e.g. RULE-001
     name = Column(String(150), nullable=False)
     description = Column(Text, nullable=True)
@@ -63,7 +63,7 @@ class ValidationRule(Base):
 class ValidationRun(Base):
     __tablename__ = "validation_runs"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     dataset_id = Column(Integer, ForeignKey("datasets.id"), nullable=False)
     run_number = Column(String(50), unique=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
@@ -88,7 +88,7 @@ class ValidationRun(Base):
 class Anomaly(Base):
     __tablename__ = "anomalies"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     validation_run_id = Column(Integer, ForeignKey("validation_runs.id"), nullable=False)
     subject_id = Column(String(50), index=True, nullable=True)
     hadm_id = Column(String(50), index=True, nullable=True)
@@ -111,7 +111,7 @@ class Anomaly(Base):
 class EventMapping(Base):
     __tablename__ = "event_mappings"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     entity_id = Column(String(50), default="subject_id")
     event_name = Column(String(100), nullable=False) # e.g. Hospital Admission, ICU Intake, Lab Test, Discharge
     table_name = Column(String(100), nullable=False)
@@ -122,7 +122,7 @@ class EventMapping(Base):
 class AuditLog(Base):
     __tablename__ = "audit_logs"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     user_id = Column(Integer, nullable=True)
     username = Column(String(50), default="system")
     action = Column(String(100), nullable=False)
@@ -134,7 +134,7 @@ class AuditLog(Base):
 class ProcessingMetric(Base):
     __tablename__ = "processing_metrics"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     validation_run_id = Column(Integer, nullable=True)
     stage_name = Column(String(100), nullable=False)
     records_processed = Column(Integer, default=0)

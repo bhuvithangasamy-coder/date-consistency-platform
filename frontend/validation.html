@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Validation Engine | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Date Validation Engine</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Trigger distributed PySpark date consistency rules over 1,000,000+ clinical records</p>
+        </div>
+
+        <button class="btn btn-primary" id="run-btn" onclick="runValidation()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Run PySpark Validation Engine
+        </button>
+      </div>
+
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 0.875rem; font-weight: 700; color: #fff; margin-bottom: 1rem;">Validation Rules Being Evaluated</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; font-size: 0.75rem;">
+          <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
+              <span>RULE-001: Dischtime &gt;= Admittime</span>
+              ${renderSeverityBadge('Critical')}
+            </div>
+            <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Ensures hospital discharge date is not before admission date.</div>
+          </div>
+          <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
+              <span>RULE-002: Transfer In/Out Chronology</span>
+              ${renderSeverityBadge('High')}
+            </div>
+            <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Verifies transfer outtime occurs after intime.</div>
+          </div>
+          <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
+              <span>RULE-003: ICU Outtime &gt;= Intime</span>
+              ${renderSeverityBadge('High')}
+            </div>
+            <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Checks ICU admission and discharge timestamp ordering.</div>
+          </div>
+          <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
+              <span>RULE-004: Prescription Endtime &gt;= Starttime</span>
+              ${renderSeverityBadge('Medium')}
+            </div>
+            <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Flags negative medication duration windows.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="result-box" style="display: none;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: #10b981; margin-bottom: 1rem;" id="result-title">Validation Completed Successfully!</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; font-size: 0.75rem;">
+          <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Run Number</span>
+            <span style="font-weight: bold; color: #fff;" id="res-run">RUN-123456</span>
+          </div>
+          <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Records Validated</span>
+            <span style="font-weight: bold; color: #fff;" id="res-records">935,000</span>
+          </div>
+          <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Violations Flagged</span>
+            <span style="font-weight: bold; color: #fb7185;" id="res-violations">14,226</span>
+          </div>
+          <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Execution Time</span>
+            <span style="font-weight: bold; color: #38bdf8;" id="res-time">12.5 seconds</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    async function runValidation() {
+      const btn = document.getElementById('run-btn');
+      const box = document.getElementById('result-box');
+      btn.innerText = 'Running PySpark Validation Engine...';
+      btn.disabled = true;
+      box.style.display = 'none';
+
+      try {
+        const res = await api.triggerValidationRun(1);
+        document.getElementById('res-run').innerText = res.run_number;
+        document.getElementById('res-records').innerText = Number(res.total_records).toLocaleString();
+        document.getElementById('res-violations').innerText = Number(res.total_violations).toLocaleString();
+        document.getElementById('res-time').innerText = `${res.duration_seconds} seconds`;
+        box.style.display = 'block';
+      } catch (e) {
+        alert('Validation Engine Error: ' + e.message);
+      } finally {
+        btn.innerText = 'Run PySpark Validation Engine';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -2,6 +2,7 @@ import os
 import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from backend.app.config import settings
 from backend.app.database import engine, Base, SessionLocal
 from backend.app.models import User, Dataset, DatasetTable, ValidationRule, EventMapping, ValidationRun, Anomaly, AuditLog
@@ -21,7 +22,7 @@ from backend.app.routers import (
     settings_router
 )
 
-# Create database tables
+# Create database tables in MySQL
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -31,7 +32,7 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Enable CORS for React Frontend
+# Enable CORS for Frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,7 +41,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include Routers
+# Include API Routers
 app.include_router(auth_router.router, prefix=settings.API_V1_STR)
 app.include_router(dataset_router.router, prefix=settings.API_V1_STR)
 app.include_router(validation_router.router, prefix=settings.API_V1_STR)
@@ -103,11 +104,7 @@ def startup_db_initializer():
     finally:
         db.close()
 
-@app.get("/")
-def root():
-    return {
-        "status": "online",
-        "system": settings.PROJECT_NAME,
-        "docs": "/docs",
-        "api_v1": settings.API_V1_STR
-    }
+# Mount Vanilla JS + HTML Frontend Static Directory
+frontend_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend")
+if os.path.exists(frontend_dir):
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="static")

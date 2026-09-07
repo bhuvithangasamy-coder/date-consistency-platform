@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anomaly Report | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Anomaly Report & Quality Inspector</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Server-side paginated report of detected date inconsistencies</p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <a id="export-btn" href="/api/anomalies/export/csv" class="btn btn-secondary" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export CSV
+          </a>
+        </div>
+      </div>
+
+      <!-- Filters Toolbar -->
+      <div class="card" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center; font-size: 0.75rem;">
+        <div>
+          <span style="color: #64748b; margin-right: 0.5rem;">Severity:</span>
+          <select id="severity-filter" onchange="loadAnomalies(1)" style="background: #0b1329; color: #fff; border: 1px solid #1e293b; padding: 0.375rem 0.5rem; border-radius: 0.5rem;">
+            <option value="">All Severities</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div>
+          <span style="color: #64748b; margin-right: 0.5rem;">Anomaly Type:</span>
+          <select id="type-filter" onchange="loadAnomalies(1)" style="background: #0b1329; color: #fff; border: 1px solid #1e293b; padding: 0.375rem 0.5rem; border-radius: 0.5rem;">
+            <option value="">All Anomaly Types</option>
+            <option value="Invalid Duration">Invalid Duration</option>
+            <option value="Sequence Violation">Sequence Violation</option>
+            <option value="Future Timestamp">Future Timestamp</option>
+            <option value="Missing Timestamp">Missing Timestamp</option>
+            <option value="Invalid Timestamp">Invalid Timestamp</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card" style="overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Subject ID</th>
+              <th>Table</th>
+              <th>Rule Code</th>
+              <th>Anomaly Type</th>
+              <th>Severity</th>
+              <th>Original Value</th>
+              <th>Expected Condition</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="anomalies-tbody">
+            <tr><td colspan="9" style="text-align: center; color: #94a3b8; padding: 2rem;">Loading anomalies...</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.75rem; color: #94a3b8;">
+          <span id="page-info">Showing page 1 of 1</span>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" id="prev-btn" onclick="changePage(-1)">Previous</button>
+            <button class="btn btn-secondary" id="next-btn" onclick="changePage(1)">Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/anomalies.js"></script>
+</body>
+</html>

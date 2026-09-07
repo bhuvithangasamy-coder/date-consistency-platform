@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <!-- Header Bar -->
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <div style="font-size: 0.75rem; font-weight: 600; color: #38bdf8; text-transform: uppercase; margin-bottom: 0.25rem;" id="ds-version-badge">
+            Kaggle MIMIC-IV Clinical Database (v2.2)
+          </div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Date Consistency Dashboard</h2>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <button class="btn btn-secondary" onclick="loadDashboard()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            Refresh Metrics
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI & Circular Progress Section -->
+      <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Circular Progress Gauge Card -->
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 1rem;">
+            Data Quality Score
+          </div>
+          <div style="position: relative; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;">
+            <svg width="140" height="140" style="transform: rotate(-90deg);">
+              <circle cx="70" cy="70" r="55" stroke="#1e293b" stroke-width="12" fill="transparent"/>
+              <circle id="gauge-circle" cx="70" cy="70" r="55" stroke="#10b981" stroke-width="12" fill="transparent" stroke-dasharray="345.57" stroke-dashoffset="10" stroke-linecap="round"/>
+            </svg>
+            <div style="position: absolute; text-align: center;">
+              <div style="font-size: 1.75rem; font-weight: 800; color: #fff;" id="score-text">98.0%</div>
+              <div style="font-size: 0.625rem; font-weight: 800; color: #10b981; text-transform: uppercase;" id="score-status">EXCELLENT</div>
+            </div>
+          </div>
+          <div style="font-size: 0.6875rem; color: #64748b; margin-top: 1rem;">
+            Formula: <span style="font-family: monospace; color: #38bdf8;">100 × Valid / Total</span>
+          </div>
+        </div>
+
+        <!-- Dynamic KPI Cards Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Total Records Processed</div>
+            <div class="kpi-value" id="kpi-total">1,135,000</div>
+            <div style="font-size: 0.75rem; color: #14b8a6; margin-top: 0.5rem;">MIMIC-IV Multi-Table Dataset</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Valid Records</div>
+            <div class="kpi-value" style="color: #10b981;" id="kpi-valid">1,112,300</div>
+            <div style="font-size: 0.75rem; color: #10b981; margin-top: 0.5rem;" id="kpi-pass-rate">98.0% Passed</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Records With Anomalies</div>
+            <div class="kpi-value" style="color: #fb7185;" id="kpi-anomalies">22,700</div>
+            <div style="font-size: 0.75rem; color: #fb7185; margin-top: 0.5rem;">Flagged Inconsistencies</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Sequence Violations</div>
+            <div class="kpi-value" style="color: #fbbf24;" id="kpi-sequence">16,000</div>
+            <div style="font-size: 0.75rem; color: #fbbf24; margin-top: 0.5rem;">Out-of-order Chronology</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Invalid Durations</div>
+            <div class="kpi-value" style="color: #c084fc;" id="kpi-durations">1,212</div>
+            <div style="font-size: 0.75rem; color: #c084fc; margin-top: 0.5rem;">End Date &lt; Start Date</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Future & Missing Dates</div>
+            <div class="kpi-value" style="color: #38bdf8;" id="kpi-future">1,200</div>
+            <div style="font-size: 0.75rem; color: #38bdf8; margin-top: 0.5rem;">Future relative to ref / Null</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="card">
+          <div class="card-header">
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: #fff;">Rule Violation Distribution</h3>
+            <span style="font-size: 0.75rem; color: #64748b; font-family: monospace;">By Rule Code</span>
+          </div>
+          <div style="height: 240px; position: relative;">
+            <canvas id="ruleChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: #fff;">Data Quality Score Trend</h3>
+            <span style="font-size: 0.75rem; color: #64748b; font-family: monospace;">Validation Runs</span>
+          </div>
+          <div style="height: 240px; position: relative;">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

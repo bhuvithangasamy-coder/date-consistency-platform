@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dataset Management | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Dataset Management</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Manage Kaggle MIMIC-IV clinical database datasets & storage paths</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="importKaggleDataset()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Import Kaggle MIMIC-IV
+        </button>
+      </div>
+
+      <div id="dataset-list-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Loaded via datasets.js -->
+        <div style="text-align: center; color: #94a3b8; padding: 2rem;">Loading datasets...</div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/datasets.js"></script>
+</body>
+</html>

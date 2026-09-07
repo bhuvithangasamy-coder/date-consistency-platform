@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Platform Settings & Infrastructure Configuration</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Manage MySQL database parameters, PySpark executor memory, and Kaggle API credentials</p>
+        </div>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="border-bottom: 1px solid #1e293b; padding-bottom: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: bold; color: #fff;">Database Configuration</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.75rem; font-size: 0.75rem;">
+            <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+              <span style="color: #64748b; display: block;">Database Engine</span>
+              <span style="font-weight: bold; color: #10b981;">MySQL 8.0 (PyMySQL Engine)</span>
+            </div>
+            <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+              <span style="color: #64748b; display: block;">Host & Port</span>
+              <span style="font-weight: bold; color: #38bdf8; font-family: monospace;">localhost:3307</span>
+            </div>
+            <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+              <span style="color: #64748b; display: block;">Database Name</span>
+              <span style="font-weight: bold; color: #c084fc; font-family: monospace;">date_validation_db</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size: 1rem; font-weight: bold; color: #fff;">PySpark Engine Runtime</h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 0.75rem; font-size: 0.75rem;">
+            <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+              <span style="color: #64748b; display: block;">Java Runtime</span>
+              <span style="font-weight: bold; color: #14b8a6; font-family: monospace;">OpenJDK 17 (Java 17.0.20)</span>
+            </div>
+            <div style="background: #0b1329; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+              <span style="color: #64748b; display: block;">PySpark Memory Allocated</span>
+              <span style="font-weight: bold; color: #fff; font-family: monospace;">spark.driver.memory = 4g</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

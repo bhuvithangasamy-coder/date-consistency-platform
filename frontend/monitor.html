@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing Monitor | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">PySpark Processing Monitor</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Real-time distributed PySpark engine validation telemetry</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="startSimulatedRun()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          Re-Run PySpark Validation Engine
+        </button>
+      </div>
+
+      <div class="card" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="width: 0.75rem; height: 0.75rem; border-radius: 9999px; background: #10b981;"></div>
+            <span style="font-size: 0.875rem; font-weight: bold; color: #fff;">Processing MIMIC-IV Clinical Database (1.1M+ Records)</span>
+          </div>
+          <span style="font-family: monospace; font-size: 0.875rem; font-weight: bold; color: #38bdf8;" id="progress-text">100%</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="width: 100%; background: #0b1329; border-radius: 9999px; height: 1.25rem; padding: 0.25rem; border: 1px solid #1e293b;">
+          <div id="progress-bar" style="width: 100%; height: 100%; border-radius: 9999px; background: linear-gradient(90deg, #0284c7, #14b8a6, #10b981); transition: width 0.3s ease;"></div>
+        </div>
+
+        <!-- Live Telemetry Grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; font-size: 0.75rem;">
+          <div style="background: #0b1329; padding: 1rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Records Detected</span>
+            <span style="font-size: 1.25rem; font-weight: 800; color: #fff;" id="mon-total">1,135,000</span>
+          </div>
+          <div style="background: #0b1329; padding: 1rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Valid Records</span>
+            <span style="font-size: 1.25rem; font-weight: 800; color: #10b981;" id="mon-valid">1,112,300</span>
+          </div>
+          <div style="background: #0b1329; padding: 1rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Invalid Records</span>
+            <span style="font-size: 1.25rem; font-weight: 800; color: #fb7185;" id="mon-invalid">22,700</span>
+          </div>
+          <div style="background: #0b1329; padding: 1rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
+            <span style="color: #64748b; display: block;">Processing Speed</span>
+            <span style="font-size: 1.25rem; font-weight: 800; color: #38bdf8;">252,000 rec/sec</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    function startSimulatedRun() {
+      let p = 0;
+      const bar = document.getElementById('progress-bar');
+      const text = document.getElementById('progress-text');
+      const timer = setInterval(() => {
+        p += 10;
+        if (p >= 100) {
+          p = 100;
+          clearInterval(timer);
+        }
+        bar.style.width = p + '%';
+        text.innerText = p + '%';
+      }, 300);
+    }
+  </script>
+</body>
+</html>

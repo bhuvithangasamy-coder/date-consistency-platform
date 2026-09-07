@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Timeline Inspector | Date Consistency Validation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <div class="app-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Patient Chronological Timeline Inspector</h2>
+          <p style="font-size: 0.75rem; color: #94a3b8;">Interactive event sequence timeline tree across admissions, transfers, ICU, lab events, prescriptions</p>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <input type="text" id="patient-search" placeholder="Enter Subject ID (e.g. 10000001)..." value="10000001" style="background: #0b1329; border: 1px solid #1e293b; border-radius: 0.75rem; padding: 0.5rem 0.875rem; color: #fff; font-size: 0.75rem; outline: none; width: 14rem;">
+          <button class="btn btn-primary" onclick="loadTimeline()">Load Patient</button>
+        </div>
+      </div>
+
+      <div class="card" id="timeline-container">
+        <div style="text-align: center; color: #94a3b8; padding: 2rem;">Enter Subject ID to view chronological event timeline.</div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/timeline.js"></script>
+</body>
+</html>
