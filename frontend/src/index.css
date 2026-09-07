@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0b1329] text-slate-100 font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Enterprise Card Glow Effect */
+.enterprise-card {
+  @apply bg-slate-900/80 border border-slate-800 rounded-xl p-5 transition-all duration-200 hover:border-sky-500/40 hover:shadow-lg hover:shadow-sky-950/20 backdrop-blur-md;
+}
+
+.gradient-text-sky {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-teal-300 to-indigo-300;
+}
+
+.gradient-text-purple {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400;
+}
