@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: date-consistency-platform
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DB_HOST
+        value: mysql-39503864-bhuvithangasamy-abaf.l.aivencloud.com
+      - key: DB_PORT
+        value: "17225"
+      - key: DB_USER
+        value: avnadmin
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: defaultdb
+      - key: SECRET_KEY
+        value: production-secret-key-2026
