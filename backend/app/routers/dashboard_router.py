@@ -80,8 +80,9 @@ def get_dashboard_summary(dataset_id: Optional[int] = None, db: Session = Depend
 
     # Quality score trend across all completed runs
     all_runs = db.query(ValidationRun).filter(ValidationRun.status == "Completed").order_by(ValidationRun.id.asc()).all()
-    trend = [{"run_number": r.run_number, "quality_score": r.quality_score, "date": r.started_at.strftime("%H:%M:%S")} for r in all_runs]
+    trend = [{"run_number": r.run_number, "quality_score": r.quality_score, "date": r.started_at.strftime("%H:%M:%S") if r.started_at else "00:00:00"} for r in all_runs]
     vol_history = [{"run_number": r.run_number, "total_records": r.total_records, "duration": r.duration_seconds} for r in all_runs]
+
 
     score = latest_run.quality_score
     if score >= 90:
