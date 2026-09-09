@@ -5,21 +5,21 @@ import datetime
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
 
-# Ensure JAVA_HOME is set for PySpark
-JAVA_HOME = r"C:\Users\bhuvi\.gemini\antigravity\scratch\jdk_env\jdk17.0.20_10"
-os.environ["JAVA_HOME"] = JAVA_HOME
-os.environ["PATH"] = os.path.join(JAVA_HOME, "bin") + os.path.pathsep + os.environ.get("PATH", "")
-
-from pyspark.sql import SparkSession
-from pyspark.sql import functions as F
-from pyspark.sql.types import StringType
+# Ensure JAVA_HOME is set dynamically for PySpark
+JAVA_HOME = os.getenv("JAVA_HOME", r"C:\Users\bhuvi\.gemini\antigravity\scratch\jdk_env\jdk17.0.20_10")
+if os.path.exists(JAVA_HOME):
+    os.environ["JAVA_HOME"] = JAVA_HOME
+    os.environ["PATH"] = os.path.join(JAVA_HOME, "bin") + os.path.pathsep + os.environ.get("PATH", "")
 
 from backend.app.models import ValidationRun, Anomaly, ProcessingMetric, AuditLog, Dataset
 from backend.app.mimic_schema import DEFAULT_RULES
 
 _spark_session = None
 
-def get_spark_session() -> SparkSession:
+def get_spark_session():
+    global _spark_session
+    from pyspark.sql import SparkSession
+
     global _spark_session
     need_create = False
     if _spark_session is None:
@@ -54,11 +54,15 @@ def get_spark_session() -> SparkSession:
 
 
 def run_pyspark_validation(db: Session, dataset_id: int, user_id: int = None, active_rules: List[Dict[str, Any]] = None) -> ValidationRun:
+    from pyspark.sql import functions as F
+    from pyspark.sql.types import StringType
+
     dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
     if not dataset:
         raise ValueError(f"Dataset with ID {dataset_id} not found")
 
     spark = get_spark_session()
+
     start_time = time.time()
     run_num = f"RUN-{int(start_time)}"
     
