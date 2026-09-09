@@ -38,13 +38,16 @@ def get_spark_session() -> SparkSession:
                 _spark_session.stop()
         except Exception:
             pass
+        driver_mem = os.getenv("SPARK_DRIVER_MEMORY", "512m" if os.getenv("RENDER") else "2g")
         _spark_session = SparkSession.builder \
             .appName("DateConsistencyValidationEngine") \
-            .master("local[*]") \
-            .config("spark.driver.memory", "4g") \
-            .config("spark.sql.shuffle.partitions", "8") \
+            .master("local[2]") \
+            .config("spark.driver.memory", driver_mem) \
+            .config("spark.executor.memory", "512m") \
+            .config("spark.sql.shuffle.partitions", "4") \
             .config("spark.ui.enabled", "false") \
             .getOrCreate()
+
 
     return _spark_session
 
