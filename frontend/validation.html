@@ -31,28 +31,28 @@
           <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
             <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
               <span>RULE-001: Dischtime &gt;= Admittime</span>
-              ${renderSeverityBadge('Critical')}
+              <span class="badge badge-critical">Critical</span>
             </div>
             <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Ensures hospital discharge date is not before admission date.</div>
           </div>
           <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
             <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
               <span>RULE-002: Transfer In/Out Chronology</span>
-              ${renderSeverityBadge('High')}
+              <span class="badge badge-high">High</span>
             </div>
             <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Verifies transfer outtime occurs after intime.</div>
           </div>
           <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
             <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
               <span>RULE-003: ICU Outtime &gt;= Intime</span>
-              ${renderSeverityBadge('High')}
+              <span class="badge badge-high">High</span>
             </div>
             <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Checks ICU admission and discharge timestamp ordering.</div>
           </div>
           <div style="background: #0b1329; padding: 0.875rem; border-radius: 0.75rem; border: 1px solid #1e293b;">
             <div style="display: flex; justify-content: space-between; font-weight: bold; color: #fff;">
               <span>RULE-004: Prescription Endtime &gt;= Starttime</span>
-              ${renderSeverityBadge('Medium')}
+              <span class="badge badge-medium">Medium</span>
             </div>
             <div style="color: #94a3b8; font-size: 0.6875rem; margin-top: 0.25rem;">Flags negative medication duration windows.</div>
           </div>
