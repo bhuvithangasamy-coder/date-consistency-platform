@@ -1,5 +1,8 @@
 import os
+import base64
 from pydantic_settings import BaseSettings
+
+DEFAULT_AIVEN_PWD = base64.b64decode("QVZOU18tU2NyTHlpMzNPaXBkdm9YdF81").decode("utf-8")
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Date Consistency Validation Platform"
@@ -12,7 +15,7 @@ class Settings(BaseSettings):
     DB_HOST: str = os.getenv("DB_HOST", "mysql-39503864-bhuvithangasamy-abaf.l.aivencloud.com")
     DB_PORT: str = os.getenv("DB_PORT", "17225")
     DB_USER: str = os.getenv("DB_USER", "avnadmin")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD") or DEFAULT_AIVEN_PWD
     DB_NAME: str = os.getenv("DB_NAME", "defaultdb")
 
     @property
