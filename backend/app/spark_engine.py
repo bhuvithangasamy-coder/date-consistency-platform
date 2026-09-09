@@ -54,16 +54,19 @@ def get_spark_session():
 
 
 def run_pyspark_validation(db: Session, dataset_id: int, user_id: int = None, active_rules: List[Dict[str, Any]] = None) -> ValidationRun:
-    from pyspark.sql import functions as F
-    from pyspark.sql.types import StringType
+    try:
+        from pyspark.sql import functions as F
+        from pyspark.sql.types import StringType
+        spark = get_spark_session()
+    except Exception as py_err:
+        spark = None
 
     dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
     if not dataset:
         raise ValueError(f"Dataset with ID {dataset_id} not found")
 
-    spark = get_spark_session()
-
     start_time = time.time()
+
     run_num = f"RUN-{int(start_time)}"
     
     # 1. Create ValidationRun DB record
